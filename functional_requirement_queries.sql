@@ -1,11 +1,4 @@
---Requirement 1: Which companies are location in Arizona?
-SELECT op_name AS company
-FROM operators
-INNER JOIN states ON operators.state_abbr = states.abbr
-WHERE states.name = 'Arizona'
-
-
---Requirement 2: Which companies operate pipelines in New Mexico?
+--Requirement 1: Which companies operate pipelines in New Mexico?
 SELECT DISTINCT op_name AS company
 FROM(
 	SELECT *,unnest(nodes) AS node
@@ -26,7 +19,7 @@ WHERE ST_Within(location, state_bounding_polygon) = TRUE
 )
 	
 
---Requirement 3: Total length of pipeline owned by each company?
+--Requirement 2: Total length of pipeline owned by each company?
 SELECT op_name AS company, round(sum) AS metres
 FROM (
 	SELECT pipeline_op_id, sum(distance)
@@ -41,6 +34,14 @@ FROM (
 WHERE pipeline_op_id = op_id
 
 
+
+--Requirement 3: Which companies are location in Arizona?
+SELECT op_name AS company
+FROM operators
+INNER JOIN states ON operators.state_abbr = states.abbr
+WHERE states.name = 'Arizona'
+
+
 --Requirement 4: How long will the supply in Tucson last?  
 SELECT round((ST_Area(ST_Transform(bounding_polygon_2d,2761))*height)/gasPerDay) AS days_Remaining
 FROM (
@@ -50,6 +51,7 @@ FROM (
 	WHERE city_name = 'Tucson'
 ) AS t
 INNER JOIN storage ON t.city_id = storage.city_id
+
 
 
 --Requirement 5: Which city supplied by one pipeline has the largest population?
