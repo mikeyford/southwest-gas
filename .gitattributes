@@ -1,2 +1,2 @@
 $ cat .gitattributes
-*.sql linguist-language=Java
+*.sql linguist-language=PostgreSQL
